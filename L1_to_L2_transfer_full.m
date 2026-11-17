@@ -264,7 +264,7 @@ for i = 1:maxIter
     plot3(ax3,rf(1),rf(2),rf(3),'^k',"DisplayName","Final Position")
 
     plot3(ax3,x(1,:),x(2,:),x(3,:),'-r','DisplayName',"Transfer Trajectory")
-    title(["Steepest Descent"; append("Iteration: ",num2str(i))])
+    title(ax3,["Steepest Descent"; append("Iteration: ",num2str(i))])
 
     drawnow
 
@@ -303,7 +303,7 @@ plot3(ri(1),ri(2),ri(3),'sk',"DisplayName","Starting Position")
 plot3(rf(1),rf(2),rf(3),'^k',"DisplayName","Final Position")
 
 plot_traj(s,'r','Transfer Trajectory');
-title("Steepest Descent")
+title("Steepest Descent Results")
 
 
 % Plot Control Profile 
@@ -420,7 +420,7 @@ for k = 1:maxIter
     plot3(ax4,rf(1),rf(2),rf(3),'^k',"DisplayName","Final Position")
 
     plot3(ax4,x(1,:),x(2,:),x(3,:),'-r','DisplayName',"Transfer Trajectory")
-    title(ax4,append("Iteration: ",num2str(k)))
+    title(ax4,["Shooting Method"; append("Iteration: ",num2str(k))])
     drawnow
 
 
@@ -517,8 +517,8 @@ end
 
 
 
-% Plot
-cla(ax3)
+% Plot Shooting Method Results
+cla(ax4)
 [moon] = plot_M(mu,LU,ax4);
 hold(ax4,"on")
 plot3(ax4,L1_orbit(1,:),L1_orbit(2,:),L1_orbit(3,:),'k')
@@ -529,7 +529,7 @@ p4 = plot3(ax4,rf(1),rf(2),rf(3),'^k',"DisplayName","Final Position");
 
 p5 = plot3(ax4,x(1,:),x(2,:),x(3,:),'-r','DisplayName',"Transfer Trajectory");
 legend([moon p3 p4 p5])
-title("Shooting Method")
+title("Shooting Method Results")
 
 [u,S] = getu(y,c,eppy);
 
@@ -633,7 +633,7 @@ for k = 1:maxIter
 
     p5 = plot3(ax5,x(1,:),x(2,:),x(3,:),'-r','DisplayName',"Transfer Trajectory");
     legend([moon p3 p4 p5])
-    title(["Continuation Results";append("$\epsilon$: ",num2str(eppy))])
+    title(ax5,["Min-Energy to Min-Fuel Continuation";append("$\epsilon$: ",num2str(eppy))])
     drawnow
     
 

@@ -20,10 +20,6 @@ set(groot,"defaultLineLineWidth",1.5)
 cc = orderedcolors("gem12");
 
 %% General Earth-Moon Info
-% Taken from https://ssd.jpl.nasa.gov/tools/periodic_orbits.html
-% Non-dimensional position and velocity (LU) and (LU/TU)
-% LU = 389703; % Km
-% TU = 382981; % s
 
 TU = 3.75162997e5; % s Values used in Hecht's Paper
 LU = 3.84400000e5; % km
@@ -31,7 +27,6 @@ VU = LU/TU; % km/s
 VUmm = VU*1e6; % mm/s
 VUcm = VU*1e5; % cm/s
 day = 24*3600; % s
-% mu = 1.215058560962404E-2; % Non-Dimensional Mass parameter (Earth-Moon)
 mu = 1.21506038e-2;
 Omega = 2*pi/TU;
 
@@ -70,25 +65,6 @@ title("Original Problem")
 T1 = 11.2*day/TU;
 T2 = 14.2*day/TU;
 
-% % New Problem
-% x1 = prop_cr3bp(xf,mu,[0 T1/2]); % L1
-% x2 = prop_cr3bp(x0,mu,[0 T2/2]); % L2
-% 
-% x0 = x1(:,end); ri = x0(1:3); vi = x0(4:6);
-% xf = x2(:,end); rf = xf(1:3); vf = xf(4:6);
-% 
-% plot_M(mu,LU);
-% hold on
-% plot_traj(L1_orbit,"k","$L_1$ Orbit");
-% plot_traj(L2_orbit,"k","$L_2$ Orbit");
-% 
-% plot3(ri(1),ri(2),ri(3),'sk',"DisplayName","Starting Position")
-% plot3(rf(1),rf(2),rf(3),'^k',"DisplayName","Final Position")
-% quiver3(ri(1),ri(2),ri(3),vi(1),vi(2),vi(3),0.5,"filled",'-r',"DisplayName","$v(t_0)$")
-% quiver3(rf(1),rf(2),rf(3),vf(1),vf(2),vf(3),0.5,"filled",'-b',"DisplayName","$v(t_f)$")
-% legend()
-% title("New Problem")
-
 
 %% Simulation Values
 
@@ -112,11 +88,7 @@ eppy = 1; % Min Energy solution
 
 %% Initial Guess
 
-% u = .75*ones(1,M);
-% alph = kron([1 0 0]',ones(1,M));
-
-load("minEnergyControl.mat");
-
+% Pick something wonky
 u = .3*cos(pi*t) + .5;
 
 alph = [.1*sin(2*pi*t); cos(2*pi*t); sin(2*pi*t + pi/16)];

@@ -16,13 +16,9 @@ set(groot, 'defaulttextInterpreter','latex')
 set(groot, 'defaultAxesFontSize',20)
 set(groot,"defaultLineLineWidth",1)
 
-cc = orderedcolors("gem12");
+
 
 %% General Earth-Moon Info
-% Taken from https://ssd.jpl.nasa.gov/tools/periodic_orbits.html
-% Non-dimensional position and velocity (LU) and (LU/TU)
-% LU = 389703; % Km
-% TU = 382981; % s
 
 TU = 3.75162997e5; % s Values used in Hecht's Paper
 LU = 3.84400000e5; % km
@@ -30,7 +26,6 @@ VU = LU/TU; % km/s
 VUmm = VU*1e6; % mm/s
 VUcm = VU*1e5; % cm/s
 day = 24*3600; % s
-% mu = 1.215058560962404E-2; % Non-Dimensional Mass parameter (Earth-Moon)
 mu = 1.21506038e-2;
 Omega = 2*pi/TU;
 
@@ -56,15 +51,6 @@ T2 = 11.2*day/TU;
 
 L1_orbit = prop_cr3bp(xi,mu,[0 T1]);
 L2_orbit = prop_cr3bp(xf,mu,[0 T2]);
-
-plot_M(mu,LU);
-hold on
-plot_traj(L1_orbit,"k","$L_1$ Orbit");
-plot_traj(L2_orbit,"k","$L_2$ Orbit");
-
-plot3(ri(1),ri(2),ri(3),'sk',"DisplayName","Starting Position")
-plot3(rf(1),rf(2),rf(3),'^k',"DisplayName","Final Position")
-legend()
 
 
 %% Simulation Values
@@ -298,8 +284,6 @@ colororder(cc);
 subplot(2,1,1)
 plot(t,Us)
 ylabel("Throttle u(t)")
-% legend(append("$\epsilon =$ ",num2str(epj(ind(1)))),append("$\epsilon =$ ",num2str(epj(ind(2)))),append("$\epsilon =$ ",num2str(epj(ind(3)))),...
-    % append("$\epsilon =$ ",num2str(epj(ind(4)))),append("$\epsilon =$ ",num2str(epj(ind(5)))),'Location','best')
 subplot(2,1,2)
 plot(t,Ss)
 ylabel("Switching Curve")

@@ -2,8 +2,7 @@
 clc;clear;close all
 
 %% Add paths
-addpath("/Users/jzast/Box/MATLAB/CR3BP")
-addpath("/Users/jzast/Box/MATLAB/Optimal Control/Transfer Project/")
+addpath("Functions\")
 
 
 %% Plot Settings
@@ -19,18 +18,12 @@ set(groot,"defaultLineLineWidth",1)
 cc = orderedcolors("gem12");
 
 %% General Earth-Moon Info
-% Taken from https://ssd.jpl.nasa.gov/tools/periodic_orbits.html
-% Non-dimensional position and velocity (LU) and (LU/TU)
-% LU = 389703; % Km
-% TU = 382981; % s
-
 TU = 3.75162997e5; % s Values used in Hecht's Paper
 LU = 3.84400000e5; % km
 VU = LU/TU; % km/s
 VUmm = VU*1e6; % mm/s
 VUcm = VU*1e5; % cm/s
 day = 24*3600; % s
-% mu = 1.215058560962404E-2; % Non-Dimensional Mass parameter (Earth-Moon)
 mu = 1.21506038e-2;
 Omega = 2*pi/TU;
 
@@ -243,68 +236,6 @@ for k = 1:maxIter
 
 end
 
-% % Hard code STM values to check if implementation is correct
-% jj = 1;
-% ym1 = propState(y0,[0 te(jj)-ddt],mu,Tmax,c,eppy); ym1 = ym1(:,end);
-% yp1 = propState(y0,[0 te(jj)+ddt],mu,Tmax,c,eppy); yp1 = yp1(:,end);
-% PHI1 = propPHI(y0,[0 te(jj)-ddt],mu,Tmax,c,eppy);
-% PSI1 = PSI(ym1,yp1,mu,Tmax,c,eppy);
-% 
-% jj = 2;
-% ym2 = propState(y0,[0 te(jj)-ddt],mu,Tmax,c,eppy); ym2 = ym2(:,end);
-% yp2 = propState(y0,[0 te(jj)+ddt],mu,Tmax,c,eppy); yp2 = yp2(:,end);
-% PHI2 = propPHI(yp1,[te(jj-1)+ddt te(jj)-ddt],mu,Tmax,c,eppy);
-% PSI2 = PSI(ym2,yp2,mu,Tmax,c,eppy);
-% 
-% jj = 3;
-% ym3 = propState(y0,[0 te(jj)-ddt],mu,Tmax,c,eppy); ym3 = ym3(:,end);
-% yp3 = propState(y0,[0 te(jj)+ddt],mu,Tmax,c,eppy); yp3 = yp3(:,end);
-% PHI3 = propPHI(yp2,[te(jj-1)+ddt te(jj)-ddt],mu,Tmax,c,eppy);
-% PSI3 = PSI(ym3,yp3,mu,Tmax,c,eppy);
-% 
-% jj = 4;
-% ym4 = propState(y0,[0 te(jj)-ddt],mu,Tmax,c,eppy); ym4 = ym4(:,end);
-% yp4 = propState(y0,[0 te(jj)+ddt],mu,Tmax,c,eppy); yp4 = yp4(:,end);
-% PHI4 = propPHI(yp3,[te(jj-1)+ddt te(jj)-ddt],mu,Tmax,c,eppy);
-% PSI4 = PSI(ym4,yp4,mu,Tmax,c,eppy);
-% 
-% jj = 5;
-% ym5 = propState(y0,[0 te(jj)-ddt],mu,Tmax,c,eppy); ym5 = ym5(:,end);
-% yp5 = propState(y0,[0 te(jj)+ddt],mu,Tmax,c,eppy); yp5 = yp5(:,end);
-% PHI5 = propPHI(yp4,[te(jj-1)+ddt te(jj)-ddt],mu,Tmax,c,eppy);
-% PSI5 = PSI(ym5,yp5,mu,Tmax,c,eppy);
-% 
-% jj = 6;
-% ym6 = propState(y0,[0 te(jj)-ddt],mu,Tmax,c,eppy); ym6 = ym6(:,end);
-% yp6 = propState(y0,[0 te(jj)+ddt],mu,Tmax,c,eppy); yp6 = yp6(:,end);
-% PHI6 = propPHI(yp5,[te(jj-1)+ddt te(jj)-ddt],mu,Tmax,c,eppy);
-% PSI6 = PSI(ym6,yp6,mu,Tmax,c,eppy);
-% 
-% PHI7 = propPHI(yp6,[te(end)+ddt tf],mu,Tmax,c,eppy);
-% 
-% PHIhc = PHI7*PSI6*PHI6*PSI5*PHI5*PSI4*PHI4*PSI3*PHI3*PSI2*PHI2*PSI1*PHI1;
-% 
-% phi13 = PHIhc(1:6,8:13);
-% phi14 = PHIhc(1:6,14);
-% 
-% phi43 = PHIhc(14,8:13);
-% phi44 = PHIhc(14,14);
-% 
-% phi = [phi13 phi14; phi43 phi44];
-% 
-% % Correction
-% dp02 = (phi\[dxf;dpmf]);
-% 
-% 
-% 
-% PHI - PHIhc
-% 
-% dp0 - dp02
-
-
-% pause
-
-
 tDays = t*TU/day;
 teDays = te*TU/day;
 
@@ -350,6 +281,71 @@ fprintf("   dVy = %.4f m/s\n",DXF(5))
 fprintf("   dVz = %.4f m/s\n",DXF(6))
 
 fprintf("Distance Norm: %.4f km \n",norm(DXF(1:3)))
+
+
+% Hard code STM values to check if implementation is correct
+jj = 1;
+ym1 = propState(y0,[0 te(jj)-ddt],mu,Tmax,c,eppy); ym1 = ym1(:,end);
+yp1 = propState(y0,[0 te(jj)+ddt],mu,Tmax,c,eppy); yp1 = yp1(:,end);
+PHI1 = propPHI(y0,[0 te(jj)-ddt],mu,Tmax,c,eppy);
+PSI1 = PSI(ym1,yp1,mu,Tmax,c,eppy);
+
+jj = 2;
+ym2 = propState(y0,[0 te(jj)-ddt],mu,Tmax,c,eppy); ym2 = ym2(:,end);
+yp2 = propState(y0,[0 te(jj)+ddt],mu,Tmax,c,eppy); yp2 = yp2(:,end);
+PHI2 = propPHI(yp1,[te(jj-1)+ddt te(jj)-ddt],mu,Tmax,c,eppy);
+PSI2 = PSI(ym2,yp2,mu,Tmax,c,eppy);
+
+jj = 3;
+ym3 = propState(y0,[0 te(jj)-ddt],mu,Tmax,c,eppy); ym3 = ym3(:,end);
+yp3 = propState(y0,[0 te(jj)+ddt],mu,Tmax,c,eppy); yp3 = yp3(:,end);
+PHI3 = propPHI(yp2,[te(jj-1)+ddt te(jj)-ddt],mu,Tmax,c,eppy);
+PSI3 = PSI(ym3,yp3,mu,Tmax,c,eppy);
+
+jj = 4;
+ym4 = propState(y0,[0 te(jj)-ddt],mu,Tmax,c,eppy); ym4 = ym4(:,end);
+yp4 = propState(y0,[0 te(jj)+ddt],mu,Tmax,c,eppy); yp4 = yp4(:,end);
+PHI4 = propPHI(yp3,[te(jj-1)+ddt te(jj)-ddt],mu,Tmax,c,eppy);
+PSI4 = PSI(ym4,yp4,mu,Tmax,c,eppy);
+
+jj = 5;
+ym5 = propState(y0,[0 te(jj)-ddt],mu,Tmax,c,eppy); ym5 = ym5(:,end);
+yp5 = propState(y0,[0 te(jj)+ddt],mu,Tmax,c,eppy); yp5 = yp5(:,end);
+PHI5 = propPHI(yp4,[te(jj-1)+ddt te(jj)-ddt],mu,Tmax,c,eppy);
+PSI5 = PSI(ym5,yp5,mu,Tmax,c,eppy);
+
+jj = 6;
+ym6 = propState(y0,[0 te(jj)-ddt],mu,Tmax,c,eppy); ym6 = ym6(:,end);
+yp6 = propState(y0,[0 te(jj)+ddt],mu,Tmax,c,eppy); yp6 = yp6(:,end);
+PHI6 = propPHI(yp5,[te(jj-1)+ddt te(jj)-ddt],mu,Tmax,c,eppy);
+PSI6 = PSI(ym6,yp6,mu,Tmax,c,eppy);
+
+PHI7 = propPHI(yp6,[te(end)+ddt tf],mu,Tmax,c,eppy);
+
+PHIhc = PHI7*PSI6*PHI6*PSI5*PHI5*PSI4*PHI4*PSI3*PHI3*PSI2*PHI2*PSI1*PHI1;
+
+phi13 = PHIhc(1:6,8:13);
+phi14 = PHIhc(1:6,14);
+
+phi43 = PHIhc(14,8:13);
+phi44 = PHIhc(14,14);
+
+phi = [phi13 phi14; phi43 phi44];
+
+% Correction
+dp02 = (phi\[dxf;dpmf]);
+
+
+
+PHI - PHIhc
+
+dp0 - dp02
+
+
+% pause
+
+
+
 
 %% FUNCTIONS
 
